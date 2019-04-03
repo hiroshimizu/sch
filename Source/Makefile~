@@ -1,0 +1,27 @@
+all: sch sch_ufm
+
+# Capavility 2.0 was already unsuported?
+#-gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_30,code=compute_30
+#-gencode=arch=compute_52,code=sm_52 -gencode=arch=compute_52,code=compute_52 \
+#-gencode=arch=compute_61,code=sm_61 -gencode=arch=compute_61,code=compute_61
+
+GENCODE = \
+-gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_20,code=compute_20
+
+NVCCFLAG = $(GENCODE) -lcudart -lcublas -lpthread -lgfortran
+
+#sch: sch.cu EXPECT.cu constant.cu func.cu potential.cu FDM.cu write.cu PHI_SOR.cu DEHINT.o cudacomplex.h Makefile
+
+sch: sch.cu EXPECT.cu constant.cu func.cu potential.cu FDM.cu write.cu PHI_SOR.cu DEHINT.o Makefile \
+		timer.c restart.c
+	nvcc -O3 -Xcompiler -Wall -o sch sch.cu DEHINT.o $(NVCCFLAG)
+
+sch_ufm: sch.cu EXPECT.cu constant.cu func.cu potential.cu FDM.cu write.cu PHI_SOR.cu DEHINT.o Makefile \
+		timer.c restart.c
+	nvcc -O3 -Xcompiler -Wall -o sch_ufm sch.cu DEHINT.o $(NVCCFLAG) -D_UFM_
+
+DEHINT.o: DEHINT.for
+	f95 -O3 -c DEHINT.for
+
+clean:
+	rm sch sch_ufm DEHINT.o

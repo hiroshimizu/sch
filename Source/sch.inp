@@ -1,0 +1,21 @@
+N_rec			=     100 		# 000.datに書くタイムステップ間隔
+N_rec_rho	=     300 		# OUTフォルダに書くタイムステップ間隔  | N_step=10万で300が基本
+N_step		=  100000		# 5×2π/ N_step ＝ 時間刻み幅  | N_stepを変えたらN_rec_rhoも変えよう。
+hx				=   2e-02		# x方向空間刻み幅	  | hx,hyを変える場合は、write.cuの      |
+hy				=   2e-02		# y方向空間刻み幅	  | rho(),pot()中のrecも変えると良いかも |
+Lx				=      16		# 解析領域 -Lx≦x≦Lx
+Ly				=      16		# 解析領域 -Ly≦y≦Ly
+omg			=    1.01		# 加速係数
+v0x			=INP_NUM_		# x方向初速(本当に速度であるように修正されている)
+v0y			=INP_NUM_ 		# y方向初速(y-canonical momentum)
+Bz				=INP_NUM_		# z方向磁束密度
+m				=INP_NUM_		# 粒子の質量
+q				=INP_NUM_		# 粒子の電荷
+x0				=INP_NUM_		# 古典粒子のx方向初期位置
+y0				=INP_NUM_		# 古典粒子のy方向初期位置
+vSIZE			=  1300e6		# ビデオメモリのサイズ（700e6 on GTX-285, 1300e6 on GTX-480）
+v0_			=      10		# 速度の規格化に用いる量[m/s]
+Bz_			=      10		# 磁束密度の規格化に用いる量[T]
+mp_			=  1.6722e-27	# 質量の規格化に用いる量[kg](陽子の質量)
+e_				=  1.602e-19	# 電荷の規格化に用いる量[C](電気素量)
+h_bar_ 		=INP_NUM_		# 換算プランク定数(ディラック定数)[J・s]
