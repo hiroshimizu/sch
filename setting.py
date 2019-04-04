@@ -85,6 +85,7 @@ def command_make(file_path):
 	elif cuda_cabability == "7.5":
 		shutil.copy("Makefile.cc75", "Makefile")
 	else:
+		print("エラー:deviceQueryでCUDA Capabilityを確認し、適切なMakefileを用意してください。")
 		exit(1)
 	os.system('make')
 	if file_path.endswith('ufm'):
