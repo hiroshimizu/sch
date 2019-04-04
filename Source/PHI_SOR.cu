@@ -134,7 +134,6 @@ __global__ void SOR ( CMPLX *psi, CMPLX *phi, REAL *res, int N_field )
 			tmpC = cuCmul( cuCdiv( mkCMPLX( omg_d, 0 ), ALPHA_ij ), ResC );
 			tmpR = Square( cuCabs( ResC ) );
 		#endif
-	__syncthreads();
 	#ifdef CUDACOMPLEX_H
 		psi[II] =         psi[II] + tmpC  ;
 	#else
@@ -142,6 +141,7 @@ __global__ void SOR ( CMPLX *psi, CMPLX *phi, REAL *res, int N_field )
 	#endif
 	res[II] = tmpR ;
 	}
+	__syncthreads();
 }
 
 

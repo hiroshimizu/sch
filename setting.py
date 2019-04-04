@@ -2,7 +2,7 @@
 #条件毎のディレクトリを作成し、すぐに実行できるようにプログラムも書き換える
 #使い方：conditions.pyに条件を書いた後にpython3 change_condition.py を実行する
 #***********************************************************************************************
-import re, sys, os, conditions, logging, shutil
+import re, sys, os, conditions, logging, shutil, subprocess
 logging.basicConfig(level=logging.DEBUG,format=' %(asctime)s - %(levelname)s - %(message)s')
 logging.disable(logging.CRITICAL)
 #**********************************************************************************************
@@ -77,6 +77,15 @@ def change_condition(condition_dict):
 #****************************************************************************
 def command_make(file_path):
 	os.chdir(file_path)
+	cuda_cabability = subprocess.check_output("deviceQuery | grep CUDA\ Capability | cut -d ' ' -f 11", shell=True).decode()[:3]
+	if cuda_cabability == "2.0":
+		shutil.copy("Makefile.cc20", "Makefile")
+	elif cuda_cabability == "6.1":
+		shutil.copy("Makefile.cc61", "Makefile")
+	elif cuda_cabability == "7.5":
+		shutil.copy("Makefile.cc75", "Makefile")
+	else:
+		exit(1)
 	os.system('make')
 	if file_path.endswith('ufm'):
 		os.system('./sch_ufm > aaa.ufm')
@@ -86,18 +95,21 @@ def command_make(file_path):
 #****************************************************************************
 #										Main
 #****************************************************************************
+if "Data" not in os.listdir("."):
+	os.makedirs('./Data')
 for condition_dict in conditions.Conditions:
-	if os.path.exists('Data/' + get_filename(condition_dict)):
+	file_name = 'Data/' + get_filename(condition_dict)
+	if os.path.exists(file_name):
 		continue
 	print('making ' + get_filename(condition_dict) +'...')
-	shutil.copytree('Source','Data/' + get_filename(condition_dict))
+	shutil.copytree('Source',file_name)
 	change_condition(condition_dict)
-	shutil.move('Data/' + get_filename(condition_dict) + '/temp_potential.cu',
-			'Data/' + get_filename(condition_dict) + '/potential.cu')
-	shutil.move('Data/' + get_filename(condition_dict) + '/temp_sch.inp',
-			'Data/' + get_filename(condition_dict) + '/sch.inp')
-	shutil.copytree('Data/' + get_filename(condition_dict),'Data/' + get_filename(condition_dict) + '_ufm')
-	command_make('Data/' + get_filename(condition_dict))
-	command_make('Data/' + get_filename(condition_dict) + '_ufm')
+	shutil.move(file_name + '/temp_potential.cu',
+			file_name + '/potential.cu')
+	shutil.move(file_name + '/temp_sch.inp',
+			file_name + '/sch.inp')
+	shutil.copytree(file_name, file_name + '_ufm')
+	command_make(file_name)
+	command_make(file_name + '_ufm')
 
 
