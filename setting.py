@@ -80,7 +80,7 @@ def command_make(file_path):
 	cuda_cabability = subprocess.check_output("deviceQuery | grep CUDA\ Capability | cut -d ' ' -f 11", shell=True).decode()[:3]
 	if cuda_cabability == "2.0":
 		shutil.copy("Makefile.cc20", "Makefile")
-	elif cuda_cabability == "6.1":
+	elif cuda_cabability == "5.2" or cuda_cabability == "6.1":
 		shutil.copy("Makefile.cc61", "Makefile")
 	elif cuda_cabability == "7.5":
 		shutil.copy("Makefile.cc75", "Makefile")
