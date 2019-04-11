@@ -77,12 +77,18 @@ def change_condition(condition_dict):
 #****************************************************************************
 def command_make(file_path):
 	os.chdir(file_path)
-	cuda_cabability = subprocess.check_output("deviceQuery | grep CUDA\ Capability | cut -d ' ' -f 11", shell=True).decode()[:3]
-	if cuda_cabability == "2.0":
+	os.makedirs("./OUT")
+	os.makedirs("./out")
+	os.makedirs("./SAVE")
+	cuda_capability = subprocess.check_output("deviceQuery | grep CUDA\ Capability | cut -d ' ' -f 11", shell=True).decode()[:3]
+	if cuda_capability == "2.0":
+		print("cuda_capability == 2.0")
 		shutil.copy("Makefile.cc20", "Makefile")
-	elif cuda_cabability == "5.2" or cuda_cabability == "6.1":
+	elif cuda_capability == "5.2" or cuda_capability == "6.1":
+		print("cuda_capability == 5.2 OR 6.1")
 		shutil.copy("Makefile.cc61", "Makefile")
-	elif cuda_cabability == "7.5":
+	elif cuda_capability == "7.5":
+		print("cuda_capability == 7.5")
 		shutil.copy("Makefile.cc75", "Makefile")
 	else:
 		print("エラー:deviceQueryでCUDA Capabilityを確認し、適切なMakefileを用意してください。")
