@@ -98,6 +98,9 @@ def command_make(file_path):
 		os.system('./sch_ufm > aaa.ufm')
 	else:
 		os.system('./sch > aaa.out')
+		os.chdir('./PLT')
+		os.system('gnuplot toEPS_multi3.plt')
+		os.chdir('../')
 	os.chdir('../../')
 #****************************************************************************
 #										Main
