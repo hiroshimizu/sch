@@ -22,7 +22,7 @@ for count_v0y in range(1, 3):
 			m = str(count_m)
 			for count_q in range(1, 3):
 				q = str(count_q)
-				x0_num = count_v0y * count_m / count_B / count_q
+				x0_num = - count_v0y * count_m / count_B / count_q
 				x0 = str(x0_num)
 #				for count_x0 in range(3):
 #					x0 = str(count_x0)
