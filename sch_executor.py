@@ -1,6 +1,8 @@
 #***********************************************************************************************
-#条件毎のディレクトリを作成し、すぐに実行できるようにプログラムも書き換える
-#使い方：conditions.pyに条件を書いた後にpython3 change_condition.py を実行する
+#									sch_executor.py
+# 条件毎のディレクトリを作成し、sch.inp potential.cuをそれぞれ書き換え、すべて実行する
+# Dataディレクトリにすべてのデータ、resultディレクトリに必要最小限のデータが入る
+#使い方：conditions.pyに条件を書いた後にpython3 sch_executor.py を実行する
 #***********************************************************************************************
 import re, sys, os, conditions, logging, shutil, subprocess
 logging.basicConfig(level=logging.DEBUG,format=' %(asctime)s - %(levelname)s - %(message)s')
@@ -17,7 +19,7 @@ def get_filename(cdtn):
 #****************************************************************************
 #											ufm_judge
 # 						ufmを計算するかどうか判定する関数
-#				E以外全て同じ条件のCaseがある場合、ufmはその結果を使えばよい
+#				E以外全て同じ条件のCaseがある場合、ufmはその結果を使えばよいので計算が省ける
 #              この関数でその結果もコピーもする
 # ufmを実行する場合はufm_judge()はTureを、実行しない場合はFalseを戻り値にとる
 #****************************************************************************
@@ -103,7 +105,6 @@ def change_condition(condition_dict):
 			file_name + '/sch.inp')
 #****************************************************************************
 #										make
-#
 #****************************************************************************
 def command_make(file_path):
 	os.chdir(file_path)
@@ -138,6 +139,8 @@ def command_make(file_path):
 #****************************************************************************
 if "Data" not in os.listdir("."):
 	os.makedirs('./Data')
+if "result" not in os.listdir("."):
+	os.makedirs('./result')
 
 for i in range(len(conditions.Conditions)):
 	file_name = 'Data/' + get_filename(conditions.Conditions[i])
@@ -150,5 +153,10 @@ for i in range(len(conditions.Conditions)):
 		shutil.copytree(file_name, file_name + '_ufm')
 		command_make(file_name + '_ufm')
 	command_make(file_name)
-
-
+	file_name2 = 'result/' + get_filename(conditions.Conditions[i])
+	os.makedirs(file_name2)
+	shutil.copy(filename + '/000.dat', filename2)
+	shutil.copy(filename + '_ufm/000.ufm', filename2)
+	shutil.copy(filename + '/PLT/locus_info.eps', filename2)
+	shutil.copy(filename + '/potential.cu', filename2)
+	shutil.copy(filename + '/sch.inp', filename2)
