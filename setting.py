@@ -14,6 +14,32 @@ def get_filename(cdtn):
 			'm' + cdtn['m'] + 'q' + cdtn['q'] + 'x' + cdtn['x0'] + 'y' + cdtn['y0'] + \
 			'h' + cdtn['h'] + 'E' + cdtn['E']
 	return filename
+#****************************************************************************
+#											ufm_judge
+# 						ufmを計算するかどうか判定する関数
+#				E以外全て同じ条件のCaseがある場合、ufmはその結果を使えばよい
+#              この関数でその結果もコピーもする
+# ufmを実行する場合はufm_judge()はTureを、実行しない場合はFalseを戻り値にとる
+#****************************************************************************
+
+def ufm_judge(i):
+	boolian = True
+	for k in range(i):
+		if conditions.Conditions[k]["v0x"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["v0y"]==conditions.Conditions[i]["v0y"] \
+			and conditions.Conditions[k]["B"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["m"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["q"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["x0"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["y0"]==conditions.Conditions[i]["v0x"] \
+			and conditions.Conditions[k]["h"]==conditions.Conditions[i]["v0x"]:
+				print("{}と{}はufmが同じです".format(conditions.Conditions[i]["Case"], conditions.Conditions[k]["Case"]))
+				os.makedirs('./Data/' + get_filename(conditions.Conditions[i]) + "_ufm")
+				os.system('touch equal' + get_filename(conditions.Conditions[k]))
+				shutil.copy('./Data/' + get_filename(conditions.Conditions[k] + '/000.ufm', './Data/' + get_filename(conditions.Conditions[i])))
+				boolian = False
+	return boolian
+
 #**********************************************************************************************
 #											関数get_fileObj(filepath)
 #         引数：ファイルのパス（文字列）	戻り値:ファイルオブジェクト
@@ -31,13 +57,13 @@ def get_fileObj(filepath):
 #         引数：辞書型の条件	機能:Caseフォルダ内のpotential.cuとsch.inpを書き換える
 #**********************************************************************************************
 def change_condition(condition_dict):
+	file_name = 'Data/' + get_filename(condition_dict)
 	#方針：メモリ上にpotential.cuとsch.inpのテキストをすべて乗せ、regex.sub()で書き換える
 	#		 一時ファイルにその書き換えたデータを出力する
-	#		(この関数はここまで、その後別にmoveで元々のファイルと取り換える)
-	potential_cu = get_fileObj('Data/' + get_filename(condition_dict) + '/potential.cu')
-	sch_inp = get_fileObj('Data/' + get_filename(condition_dict) + '/sch.inp')
-	temp_potential_cu = open('Data/' + get_filename(condition_dict) + '/temp_potential.cu','w',encoding='utf-8')
-	temp_sch_inp = open('Data/' + get_filename(condition_dict) + '/temp_sch.inp','w',encoding='utf-8')
+	potential_cu = get_fileObj(file_name + '/potential.cu')
+	sch_inp = get_fileObj(file_name + '/sch.inp')
+	temp_potential_cu = open(file_name + '/temp_potential.cu','w',encoding='utf-8')
+	temp_sch_inp = open(file_name + '/temp_sch.inp','w',encoding='utf-8')
 	#potential.cuとsch.inpをメモリ上に乗せる
 	potential_lines = potential_cu.readlines()
 	sch_lines = sch_inp.readlines()
@@ -71,6 +97,10 @@ def change_condition(condition_dict):
 	temp_potential_cu.close()
 	sch_inp.close()
 	temp_sch_inp.close()
+	shutil.move(file_name + '/temp_potential.cu',
+			file_name + '/potential.cu')
+	shutil.move(file_name + '/temp_sch.inp',
+			file_name + '/sch.inp')
 #****************************************************************************
 #										make
 #
@@ -102,24 +132,23 @@ def command_make(file_path):
 		os.system('gnuplot toEPS_multi3.plt')
 		os.chdir('../')
 	os.chdir('../../')
+
 #****************************************************************************
 #										Main
 #****************************************************************************
 if "Data" not in os.listdir("."):
 	os.makedirs('./Data')
-for condition_dict in conditions.Conditions:
-	file_name = 'Data/' + get_filename(condition_dict)
+
+for i in range(len(conditions.Conditions)):
+	file_name = 'Data/' + get_filename(conditions.Conditions[i])
 	if os.path.exists(file_name):
 		continue
-	print('making ' + get_filename(condition_dict) +'...')
+	print('making ' + file_name +'...')
 	shutil.copytree('Source',file_name)
-	change_condition(condition_dict)
-	shutil.move(file_name + '/temp_potential.cu',
-			file_name + '/potential.cu')
-	shutil.move(file_name + '/temp_sch.inp',
-			file_name + '/sch.inp')
-	shutil.copytree(file_name, file_name + '_ufm')
+	change_condition(conditions.Conditions[i])
+	if(ufm_judge(i)):
+		shutil.copytree(file_name, file_name + '_ufm')
+		command_make(file_name + '_ufm')
 	command_make(file_name)
-	command_make(file_name + '_ufm')
 
 
