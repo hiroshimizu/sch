@@ -29,7 +29,7 @@ for count_v0y in range(1, 3):
 #					for count_y0 in range(3):
 #						y0 = str(count_y0)
 				for count_h in range(1, 7):
-					h = str(count_h)
+					h = "0." + str(count_h)
 					for count_E in range(4,6):
 						E = '1e-' + str(count_E)
 						case_number += 1
