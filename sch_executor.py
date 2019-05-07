@@ -38,7 +38,7 @@ def ufm_judge(i):
 				print("{}と{}はufmが同じです".format(conditions.Conditions[i]["Case"], conditions.Conditions[k]["Case"]))
 				os.makedirs('./Data/' + get_filename(conditions.Conditions[i]) + "_ufm")
 				os.system('touch ./Data/'+ get_filename(conditions.Conditions[i]) + '_ufm/equal' + get_filename(conditions.Conditions[k]))
-				shutil.copy('./Data/' + get_filename(conditions.Conditions[k]) + '_ufm/000.ufm', './Data/' + get_filename(conditions.Conditions[i]) + '_ufm'))
+				shutil.copy('./Data/' + get_filename(conditions.Conditions[k]) + '_ufm/000.ufm', './Data/' + get_filename(conditions.Conditions[i]) + '_ufm')
 				boolian = False
 	return boolian
 
