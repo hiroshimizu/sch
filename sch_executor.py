@@ -29,12 +29,12 @@ def ufm_judge(i):
 	for k in range(i):
 		if conditions.Conditions[k]["v0x"]==conditions.Conditions[i]["v0x"] \
 			and conditions.Conditions[k]["v0y"]==conditions.Conditions[i]["v0y"] \
-			and conditions.Conditions[k]["B"]==conditions.Conditions[i]["v0x"] \
-			and conditions.Conditions[k]["m"]==conditions.Conditions[i]["v0x"] \
-			and conditions.Conditions[k]["q"]==conditions.Conditions[i]["v0x"] \
-			and conditions.Conditions[k]["x0"]==conditions.Conditions[i]["v0x"] \
-			and conditions.Conditions[k]["y0"]==conditions.Conditions[i]["v0x"] \
-			and conditions.Conditions[k]["h"]==conditions.Conditions[i]["v0x"]:
+			and conditions.Conditions[k]["B"]==conditions.Conditions[i]["B"] \
+			and conditions.Conditions[k]["m"]==conditions.Conditions[i]["m"] \
+			and conditions.Conditions[k]["q"]==conditions.Conditions[i]["q"] \
+			and conditions.Conditions[k]["x0"]==conditions.Conditions[i]["x0"] \
+			and conditions.Conditions[k]["y0"]==conditions.Conditions[i]["y0"] \
+			and conditions.Conditions[k]["h"]==conditions.Conditions[i]["h"]:
 				print("{}と{}はufmが同じです".format(conditions.Conditions[i]["Case"], conditions.Conditions[k]["Case"]))
 				os.makedirs('./Data/' + get_filename(conditions.Conditions[i]) + "_ufm")
 				os.system('touch equal' + get_filename(conditions.Conditions[k]))
