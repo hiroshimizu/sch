@@ -61,7 +61,7 @@ void PotEne
 		#endif
 		const REAL Ey = 1;
 		REAL y2 = y * y;
-		return - q * Ey * y2 * y2 * y / 5 * LE4_INV;
+		return - q * Ey * y2 * y2 * y2 * y2 / 8 * LE4_INV;
 	//	REAL Ey = 0;
 	//	REAL Ey = 1;
 	//	REAL Ey = 1e-4;
