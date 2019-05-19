@@ -28,9 +28,9 @@ for count_v0y in range(1, 3):
 #					x0 = str(count_x0)
 #					for count_y0 in range(3):
 #						y0 = str(count_y0)
-				for count_h in range(1, 7):
-					h = "0." + str(count_h)
-					for count_E in range(4,6):
+				for count_h in [0.9, 1.0, 1.1]:
+					h = str(count_h)
+					for count_E in range(5,7):
 						E = '1e-' + str(count_E)
 						case_number += 1
 						condition = {'Case':str(case_number), 'v0x':v0x, 'v0y':v0y, 'B':B, 'm':m, 'q':q, 'x0':x0,'y0':y0, 'h':h, 'E':E}
