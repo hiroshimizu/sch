@@ -14,13 +14,13 @@ v0x = str(0)
 case_number = 0
 #for count_v0x in range(1, 3):
 #	v0x = str(count_v0x)
-for count_v0y in range(1, 3):
+for count_v0y in range(1, 2):
 	v0y = str(count_v0y)
-	for count_B in range(1, 3):
+	for count_B in range(1, 2):
 		B = str(count_B)
-		for count_m in range(1, 3):
+		for count_m in range(1, 2):
 			m = str(count_m)
-			for count_q in range(1, 3):
+			for count_q in range(1, 2):
 				q = str(count_q)
 				x0_num = - count_v0y * count_m / count_B / count_q
 				x0 = str(x0_num)
@@ -28,9 +28,9 @@ for count_v0y in range(1, 3):
 #					x0 = str(count_x0)
 #					for count_y0 in range(3):
 #						y0 = str(count_y0)
-				for count_h in [0.9, 1.0, 1.1]:
+				for count_h in [1.0]:
 					h = str(count_h)
-					for count_E in range(5,7):
+					for count_E in range(7,10):
 						E = '1e-' + str(count_E)
 						case_number += 1
 						condition = {'Case':str(case_number), 'v0x':v0x, 'v0y':v0y, 'B':B, 'm':m, 'q':q, 'x0':x0,'y0':y0, 'h':h, 'E':E}
